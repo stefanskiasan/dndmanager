@@ -411,10 +411,16 @@ R3F Canvas
 ```
 Spieler-Beschreibung → Claude API (optimierter Prompt)
 → Meshy/Tripo3D API (GLB/GLTF)
-→ Post-Processing: Auto-Rigging (Mixamo), Animation-Set, Textur-Optimierung, LOD, Thumbnail
+→ Post-Processing: Auto-Rigging, Animation-Set, Textur-Optimierung, LOD, Thumbnail
 → Supabase Storage (CDN-cached)
 → R3F Loader im Spiel
 ```
+
+**Auto-Rigging Strategie:**
+- **Primaer:** Mixamo (Adobe) — weit verbreiteter Service fuer Character-Rigging und Animationen
+- **Fallback:** AccuRIG (Reallusion) oder Open-Source-Loesung (z.B. Rigify/Blender headless)
+- **Evaluation in Phase 3:** Vor der Implementierung werden Mixamo-API-Verfuegbarkeit und Nutzungsbedingungen geprueft. Falls instabil oder restriktiv, wird auf die Fallback-Loesung gewechselt
+- Animation-Sets (Idle, Walk, Attack, Cast, Hit, Death) werden als Standard-Set vorgehalten und auf jedes geriggede Modell angewendet
 
 ### Performance
 - Instancing (gleiche Monster teilen Geometrie)
@@ -537,10 +543,20 @@ Jeder Spieler steuert eigenes Audio-Mix (Master, Musik, Ambience, Effekte). GM k
 - ~3000+ Items, ~1500+ Monsters, ~40 Conditions, ~300+ Traits
 
 ### Lizenz-Compliance (ORC)
-- Nur mechanische Daten (frei nutzbar)
-- Product Identity geflaggt und separat behandelt
+
+PF2e Remastered nutzt die **ORC-Lizenz** (Open RPG Creative License), nicht OGL.
+
+- Nur mechanische Daten importieren (unter ORC frei nutzbar)
+- Product Identity (Paizo-spezifische Namen, Settings) geflaggt und separat behandelt
 - AI generiert eigene Beschreibungen wo noetig
-- `ogl_compliant` Flag pro Datensatz
+- `orc_compliant` Flag pro Datensatz fuer Audit
+
+**Datenquellen-Lizenzierung:**
+- **Archives of Nethys:** Offiziell von Paizo autorisierte Online-Referenz, ORC-lizenzierte Inhalte
+- **Foundry VTT pf2e-system:** Code unter GPL, Spieldaten unter ORC — nur ORC-Daten importieren, kein Foundry-Code
+- **PF2e SRD:** ORC-lizenziert
+
+Die Import-Pipeline muss pro Quelle den Lizenz-Typ tracken. Ein Compliance-Check ist Teil der Validierung.
 
 ### Hausregeln-Layer
 - Offizielle Daten = read-only Base Layer
@@ -554,7 +570,7 @@ Jeder Spieler steuert eigenes Audio-Mix (Master, Musik, Ambience, Effekte). GM k
 ### Row Level Security (RLS)
 
 - Spieler sehen nur eigene Charakter-Details + oeffentliche Infos anderer PCs
-- Monster-Stats nur nach erfolgreichem Recall Knowledge
+- Monster-Stats nur nach erfolgreichem Recall Knowledge (siehe Recall Knowledge Modell unten)
 - Fog-of-War filtert pro Spieler
 - GM hat vollen Zugriff auf seine Kampagne
 - PF2e-Regelwerk read-only fuer alle
@@ -562,6 +578,21 @@ Jeder Spieler steuert eigenes Audio-Mix (Master, Musik, Ambience, Effekte). GM k
 ### Informations-Asymmetrie
 
 Spieler sehen NICHT: Monster-HP (nur Zustandsbeschreibung), Monster-Stats (bis Recall Knowledge), Fallen, versteckte NPCs, GM-Notizen, zukuenftige Raeume.
+
+### Recall Knowledge Modell
+
+`character_monster_knowledge` speichert strukturierte Wissens-Stufen pro Monster-Typ:
+
+```
+knowledge_entries:
+├── level: "none"     → Spieler weiss nichts
+├── level: "basic"    → Kreatur-Typ, Traits (Critical Success auf niedrigem DC)
+├── level: "moderate" → + Schwaechen, Resistenzen, AC-Bereich
+├── level: "detailed" → + Spezial-Abilities, Saves, bekannte Angriffe
+└── level: "expert"   → + exakte Stats (wie GM-Sicht)
+```
+
+Jeder erfolgreiche Recall Knowledge Check erhoeht die Stufe um 1 (Critical Success um 2). Die Stufe bestimmt welche Felder der `game_tokens`-RLS-Policy fuer diesen Spieler sichtbar sind. Wissen ist pro Charakter, nicht pro Spieler — verschiedene PCs koennen unterschiedlich viel wissen. Wissen gilt fuer den Monster-Typ, nicht die Instanz (wer Goblins kennt, kennt alle Goblins).
 
 ### Secret Rolls
 
