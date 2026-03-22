@@ -2,6 +2,8 @@
 
 import { useGameStore } from '@/lib/stores/game-store'
 import { ActionMenu } from './actions/ActionMenu'
+import { AudioProvider } from './audio/AudioProvider'
+import { AudioPlayer } from './audio/AudioPlayer'
 
 export function InitiativeBar() {
   const mode = useGameStore((s) => s.mode)
@@ -80,6 +82,8 @@ export function ActionBar() {
 export function UIOverlay() {
   return (
     <>
+      <AudioProvider />
+      <AudioPlayer />
       <InitiativeBar />
       <ActionBar />
     </>
