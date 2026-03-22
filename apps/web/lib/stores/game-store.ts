@@ -13,11 +13,15 @@ interface GameStore {
   turn: TurnState | null
   round: number
 
+  // Sync
+  gameStateId: string | null
+
   // Map
   mapSize: [number, number]
   mapTiles: string
 
   // Actions
+  setGameStateId: (id: string | null) => void
   setTokens: (tokens: Token[]) => void
   selectToken: (tokenId: string | null) => void
   setHoveredPosition: (pos: GridPosition | null) => void
@@ -40,12 +44,15 @@ const initialState = {
   currentTurnIndex: -1,
   turn: null as TurnState | null,
   round: 0,
+  gameStateId: null as string | null,
   mapSize: [10, 10] as [number, number],
   mapTiles: 'stone',
 }
 
 export const useGameStore = create<GameStore>((set) => ({
   ...initialState,
+
+  setGameStateId: (id) => set({ gameStateId: id }),
 
   setTokens: (tokens) => set({ tokens }),
 
