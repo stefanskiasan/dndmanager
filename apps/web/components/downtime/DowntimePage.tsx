@@ -86,7 +86,7 @@ export function DowntimePage() {
           )}
           {'daysRequired' in result && (
             <div className="text-sm">
-              Retraining requires {result.daysRequired} days.
+              Retraining requires {String(result.daysRequired)} days.
             </div>
           )}
         </div>

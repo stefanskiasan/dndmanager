@@ -30,14 +30,25 @@ export async function POST(
       return NextResponse.json({ error: 'Character not found' }, { status: 404 })
     }
 
+    // Merge level-up data into the character's JSON data column
+    const charData = (character.data ?? {}) as Record<string, unknown>
+    const currentMaxHp = (charData.hp_max as number) ?? 0
+    const updatedData = {
+      ...charData,
+      hp_max: currentMaxHp + body.hpIncrease,
+      hp_current: currentMaxHp + body.hpIncrease,
+      abilityBoosts: [...((charData.abilityBoosts as string[]) ?? []), ...body.abilityBoosts],
+      skillIncreases: [...((charData.skillIncreases as string[]) ?? []), ...body.skillIncreases],
+      feats: [...((charData.feats as { slot: string; name: string }[]) ?? []), ...body.feats],
+      ...(body.spells ? { spells: [...((charData.spells as string[]) ?? []), ...body.spells] } : {}),
+    }
+
     // Update character with level-up data
     const { error: updateError } = await supabase
       .from('characters')
       .update({
         level: body.newLevel,
-        hp_max: (character.hp_max ?? 0) + body.hpIncrease,
-        hp_current: (character.hp_max ?? 0) + body.hpIncrease,
-        // Additional fields updated via JSON columns
+        data: updatedData,
         updated_at: new Date().toISOString(),
       })
       .eq('id', characterId)

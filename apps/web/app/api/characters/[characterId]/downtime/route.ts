@@ -41,9 +41,9 @@ export async function POST(
 
     // Log the downtime activity
     await supabase.from('game_action_log').insert({
-      character_id: characterId,
+      game_state_id: characterId,
       event_type: `downtime:${body.activity}`,
-      data: result,
+      data: result as unknown as Record<string, unknown>,
     })
 
     return NextResponse.json(result)
