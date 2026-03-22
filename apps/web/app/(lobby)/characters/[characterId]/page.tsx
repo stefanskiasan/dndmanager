@@ -74,7 +74,7 @@ export default async function CharacterDetailPage({
           )}
 
           {/* Ability Scores */}
-          {charData.abilities && (
+          {Boolean(charData.abilities) && (
             <>
               <h3 className="text-sm font-semibold text-neutral-400">Ability Scores</h3>
               <div className="grid grid-cols-6 gap-2 text-center">
@@ -89,17 +89,17 @@ export default async function CharacterDetailPage({
           )}
 
           {/* Class & Ancestry */}
-          {(charData.class || charData.ancestry) && (
+          {Boolean(charData.class || charData.ancestry) && (
             <>
               <Separator />
               <div className="grid grid-cols-2 gap-4">
-                {charData.ancestry && (
+                {Boolean(charData.ancestry) && (
                   <div>
                     <span className="text-xs text-neutral-500">Ancestry</span>
                     <p className="font-medium">{charData.ancestry as string}</p>
                   </div>
                 )}
-                {charData.class && (
+                {Boolean(charData.class) && (
                   <div>
                     <span className="text-xs text-neutral-500">Class</span>
                     <p className="font-medium">{charData.class as string}</p>
@@ -128,7 +128,7 @@ export default async function CharacterDetailPage({
             </div>
           </div>
 
-          {!charData.abilities && !charData.class && (
+          {!Boolean(charData.abilities) && !Boolean(charData.class) && (
             <div className="rounded bg-neutral-800/50 p-4 text-center">
               <p className="text-neutral-400">Charakter-Details werden nach der Erstellung ueber den AI-Wizard oder Pathbuilder-Import angezeigt.</p>
             </div>
