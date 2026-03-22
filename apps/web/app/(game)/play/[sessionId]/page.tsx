@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { useGameStore } from '@/lib/stores/game-store'
+import { NpcDialogPanel } from '@/components/game/dialog/NpcDialogPanel'
 import type { Token } from '@dndmanager/game-runtime'
 
 const GameCanvas = dynamic(
@@ -63,6 +65,8 @@ const MOCK_TOKENS: Token[] = [
 ]
 
 export default function PlayPage() {
+  const params = useParams()
+  const sessionId = params.sessionId as string
   const setTokens = useGameStore((s) => s.setTokens)
   const setMap = useGameStore((s) => s.setMap)
   const setMode = useGameStore((s) => s.setMode)
@@ -94,8 +98,12 @@ export default function PlayPage() {
   }, [])
 
   return (
-    <div className="h-screen w-screen bg-neutral-950">
+    <div className="h-screen w-screen bg-neutral-950 relative">
       <GameCanvas />
+      {/* NPC Dialog — shown when player clicks on an NPC token */}
+      <div className="absolute bottom-4 right-4 z-50">
+        <NpcDialogPanel sessionId={sessionId} />
+      </div>
     </div>
   )
 }

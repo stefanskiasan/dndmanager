@@ -8,6 +8,7 @@ import { EncounterPanel } from '@/components/gm/EncounterPanel'
 import { MonsterSpawner } from '@/components/gm/MonsterSpawner'
 import { TurnControls } from '@/components/gm/TurnControls'
 import { CoGMPanel } from '@/components/gm/cogm/CoGMPanel'
+import { NpcApprovalPanel } from '@/components/gm/NpcApprovalPanel'
 import { cn } from '@/lib/utils'
 import type { Token } from '@dndmanager/game-runtime'
 
@@ -94,6 +95,9 @@ export default function GMDashboardPage() {
             <EncounterPanel />
             <MonsterSpawner />
             <TurnControls />
+
+            {/* NPC Approval Queue */}
+            <NpcApprovalPanel sessionId={sessionId} />
 
             {/* Token list */}
             <div className="rounded border border-neutral-800 p-3">

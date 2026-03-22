@@ -46,7 +46,7 @@ describe('generateSessionJournal', () => {
     expect(result.title).toBe('The Battle of Thornwood')
     expect(result.narrative).toContain('dark forest')
     expect(result.highlights).toHaveLength(2)
-    expect(result.combatSummary).toContain('goblin chief')
+    expect(result.combatSummary).toContain('Thorin dealt the killing blow')
     expect(result.sessionId).toBe('session-1')
     expect(result.campaignId).toBe('campaign-1')
   })
