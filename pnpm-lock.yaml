@@ -145,6 +145,9 @@ importers:
       '@dndmanager/pf2e-engine':
         specifier: workspace:*
         version: link:../pf2e-engine
+      '@dndmanager/scene-framework':
+        specifier: workspace:*
+        version: link:../scene-framework
       '@dndmanager/shared':
         specifier: workspace:*
         version: link:../shared
