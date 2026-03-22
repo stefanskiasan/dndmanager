@@ -133,7 +133,7 @@ export default async function CampaignDetailPage({
                   </div>
                   <div className="flex gap-2">
                     {isGM && session.status !== 'completed' && (
-                      <Link href={`/gm/dashboard/${session.id}`}>
+                      <Link href={`/dashboard/${session.id}`}>
                         <Button variant="outline" size="sm">GM Dashboard</Button>
                       </Link>
                     )}
