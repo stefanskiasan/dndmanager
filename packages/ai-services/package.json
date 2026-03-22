@@ -18,6 +18,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "@dndmanager/shared": "workspace:*",
+    "@supabase/supabase-js": "^2.45.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
