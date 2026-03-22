@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
-    "@dndmanager/shared": "workspace:*"
+    "@dndmanager/shared": "workspace:*",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "vitest": "^3.0.0"
