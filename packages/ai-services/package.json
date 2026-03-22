@@ -12,7 +12,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "data:import": "tsx src/cli.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
@@ -20,6 +21,7 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "tsx": "^4.19.0",
     "vitest": "^3.0.0"
   }
 }
