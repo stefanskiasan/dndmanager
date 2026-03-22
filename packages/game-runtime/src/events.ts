@@ -51,6 +51,21 @@ export function formatEventAsText(event: GameEvent): string {
     case 'condition_removed':
       return `${event.data.tokenId} lost ${event.data.condition}`
 
+    case 'npc_dialog_started':
+      return `${event.data.playerName} started talking to ${event.data.npcName}`
+
+    case 'npc_dialog_message':
+      return `${event.data.senderName}: "${(event.data.content as string).slice(0, 80)}${(event.data.content as string).length > 80 ? '...' : ''}"`
+
+    case 'npc_dialog_approved':
+      return `GM approved ${event.data.npcName}'s response`
+
+    case 'npc_dialog_rejected':
+      return `GM rejected ${event.data.npcName}'s response`
+
+    case 'npc_dialog_ended':
+      return `Conversation with ${event.data.npcName} ended`
+
     default:
       return `${event.type}: ${JSON.stringify(event.data)}`
   }

@@ -77,6 +77,11 @@ export type GameEventType =
   | 'condition_added'
   | 'condition_removed'
   | 'round_start'
+  | 'npc_dialog_started'
+  | 'npc_dialog_message'
+  | 'npc_dialog_approved'
+  | 'npc_dialog_rejected'
+  | 'npc_dialog_ended'
 
 export interface GameEvent {
   type: GameEventType
