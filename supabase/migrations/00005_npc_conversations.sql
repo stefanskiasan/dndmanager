@@ -4,7 +4,7 @@
 
 -- NPC Conversations: tracks an ongoing dialog between a player and an NPC
 create table public.npc_conversations (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   session_id uuid not null references public.sessions(id) on delete cascade,
   npc_id text not null,
   player_id uuid not null references public.profiles(id) on delete cascade,
@@ -51,7 +51,7 @@ create policy "GMs can manage NPC conversations"
 
 -- NPC Messages: individual messages within a conversation
 create table public.npc_messages (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   conversation_id uuid not null references public.npc_conversations(id) on delete cascade,
   role text not null check (role in ('player', 'npc', 'system')),
   content text not null,

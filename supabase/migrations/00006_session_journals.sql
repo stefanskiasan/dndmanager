@@ -3,7 +3,7 @@
 -- ============================================================
 
 create table public.session_journals (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   session_id uuid not null references public.sessions(id) on delete cascade,
   campaign_id uuid not null references public.campaigns(id) on delete cascade,
   title text not null,

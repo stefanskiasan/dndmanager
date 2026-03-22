@@ -4,8 +4,11 @@
 -- ============================================================
 
 -- Enable necessary extensions
-create extension if not exists "uuid-ossp";
-create extension if not exists "pgcrypto";
+create extension if not exists "uuid-ossp" with schema extensions;
+create extension if not exists "pgcrypto" with schema extensions;
+
+-- Make extension functions available without schema prefix
+set search_path to public, extensions;
 
 -- ============================================================
 -- Profiles (extends Supabase Auth)
@@ -54,7 +57,7 @@ create trigger on_auth_user_created
 -- Campaigns
 -- ============================================================
 create table public.campaigns (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   name text not null,
   description text not null default '',
   gm_id uuid not null references public.profiles(id) on delete cascade,
@@ -78,34 +81,13 @@ create table public.campaigns (
 
 alter table public.campaigns enable row level security;
 
-create policy "Members can view their campaigns"
-  on public.campaigns for select
-  using (
-    gm_id = auth.uid()
-    or exists (
-      select 1 from public.campaign_members
-      where campaign_id = campaigns.id
-      and user_id = auth.uid()
-    )
-  );
-
-create policy "GMs can create campaigns"
-  on public.campaigns for insert
-  with check (gm_id = auth.uid());
-
-create policy "GMs can update their campaigns"
-  on public.campaigns for update
-  using (gm_id = auth.uid());
-
-create policy "GMs can delete their campaigns"
-  on public.campaigns for delete
-  using (gm_id = auth.uid());
+-- Campaign RLS policies are defined AFTER campaign_members table (forward reference)
 
 -- ============================================================
 -- Campaign Members
 -- ============================================================
 create table public.campaign_members (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   campaign_id uuid not null references public.campaigns(id) on delete cascade,
   user_id uuid not null references public.profiles(id) on delete cascade,
   role text not null default 'player' check (role in ('player', 'gm')),
@@ -145,10 +127,36 @@ create policy "GMs can manage members"
   );
 
 -- ============================================================
+-- Campaign RLS policies (after campaign_members exists)
+-- ============================================================
+create policy "Members can view their campaigns"
+  on public.campaigns for select
+  using (
+    gm_id = auth.uid()
+    or exists (
+      select 1 from public.campaign_members
+      where campaign_id = campaigns.id
+      and user_id = auth.uid()
+    )
+  );
+
+create policy "GMs can create campaigns"
+  on public.campaigns for insert
+  with check (gm_id = auth.uid());
+
+create policy "GMs can update their campaigns"
+  on public.campaigns for update
+  using (gm_id = auth.uid());
+
+create policy "GMs can delete their campaigns"
+  on public.campaigns for delete
+  using (gm_id = auth.uid());
+
+-- ============================================================
 -- Sessions
 -- ============================================================
 create table public.sessions (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   campaign_id uuid not null references public.campaigns(id) on delete cascade,
   name text not null,
   status text not null default 'planned' check (status in ('planned', 'active', 'completed')),
@@ -188,7 +196,7 @@ create policy "GMs can manage sessions"
 -- Characters (base — expanded in Phase 1.2)
 -- ============================================================
 create table public.characters (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   owner_id uuid not null references public.profiles(id) on delete cascade,
   campaign_id uuid not null references public.campaigns(id) on delete cascade,
   name text not null,

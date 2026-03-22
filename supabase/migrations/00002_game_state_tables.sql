@@ -4,7 +4,7 @@
 
 -- Game State: tracks current mode, round, active session
 create table public.game_state (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   session_id uuid not null references public.sessions(id) on delete cascade,
   mode text not null default 'exploration' check (mode in ('exploration', 'encounter', 'downtime')),
   round integer not null default 0,
@@ -108,7 +108,7 @@ create policy "Players can update their own tokens"
 
 -- Game Initiative: turn order during encounters
 create table public.game_initiative (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   game_state_id uuid not null references public.game_state(id) on delete cascade,
   token_id text not null,
   roll integer not null,
@@ -147,7 +147,7 @@ create policy "GMs can manage initiative"
 
 -- Game Action Log: records all actions for replay
 create table public.game_action_log (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   game_state_id uuid not null references public.game_state(id) on delete cascade,
   event_type text not null,
   data jsonb not null default '{}'::jsonb,
