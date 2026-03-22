@@ -169,3 +169,65 @@ export interface NpcApprovalAction {
   /** Required when action is 'edit' */
   editedContent?: string
 }
+
+// ─── Co-GM Types ─────────────────────────────
+
+/** A single message in a Co-GM conversation */
+export interface CoGMMessage {
+  role: 'user' | 'assistant'
+  content: string
+  timestamp: number
+}
+
+/** Game context snapshot injected into Co-GM system prompt */
+export interface GameContextSnapshot {
+  sessionId: string
+  mode: 'exploration' | 'encounter' | 'downtime'
+  round: number
+  tokens: {
+    id: string
+    name: string
+    type: 'player' | 'monster' | 'npc'
+    hp: { current: number; max: number }
+    ac: number
+    conditions: string[]
+  }[]
+  currentTurnTokenId?: string
+  recentEvents: string[] // last ~20 formatted event strings
+}
+
+/** Request payload for the Co-GM chat endpoint */
+export interface CoGMRequest {
+  message: string
+  conversationHistory: CoGMMessage[]
+  gameContext: GameContextSnapshot
+  campaignSetting?: string
+}
+
+// ─── Journal Types ───────────────────────────
+
+/** A generated session journal entry */
+export interface SessionJournal {
+  id: string
+  sessionId: string
+  campaignId: string
+  title: string
+  narrative: string      // markdown-formatted narrative summary
+  highlights: string[]   // key moments
+  combatSummary?: string // encounter recap if any combat occurred
+  generatedAt: string    // ISO timestamp
+}
+
+/** Request payload for journal generation */
+export interface JournalGenerateRequest {
+  sessionId: string
+  campaignId: string
+  sessionName: string
+  actionLog: {
+    eventType: string
+    data: Record<string, unknown>
+    createdAt: string
+  }[]
+  partyMembers: string[] // character names
+  campaignSetting?: string
+}
