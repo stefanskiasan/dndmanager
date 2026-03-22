@@ -82,6 +82,15 @@ export type GameEventType =
   | 'npc_dialog_approved'
   | 'npc_dialog_rejected'
   | 'npc_dialog_ended'
+  | 'trigger_fired'
+  | 'trigger_disabled'
+  | 'boss_phase_entered'
+  | 'boss_phase_effect'
+  | 'room_event_propagated'
+  | 'spawn_executed'
+  | 'lighting_changed'
+  | 'map_changed'
+  | 'narrative_displayed'
 
 export interface GameEvent {
   type: GameEventType

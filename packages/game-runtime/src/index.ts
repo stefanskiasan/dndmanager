@@ -21,3 +21,5 @@ export type {
   RejectDialogParams,
   EndDialogParams,
 } from './npc-dialog.js'
+
+export * from './triggers/index.js'

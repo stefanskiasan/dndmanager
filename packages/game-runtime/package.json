@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@dndmanager/shared": "workspace:*",
-    "@dndmanager/pf2e-engine": "workspace:*"
+    "@dndmanager/pf2e-engine": "workspace:*",
+    "@dndmanager/scene-framework": "workspace:*"
   },
   "devDependencies": {
     "vitest": "^3.0.0"
