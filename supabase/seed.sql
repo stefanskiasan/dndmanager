@@ -1,0 +1,2 @@
+-- Seed data will be added as features are built
+-- PF2e Regelwerk data will be imported via AI pipeline (Phase 2)
