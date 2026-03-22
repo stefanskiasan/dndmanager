@@ -7,6 +7,10 @@
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./pathbuilder": {
+      "types": "./src/pathbuilder/index.ts",
+      "default": "./src/pathbuilder/index.ts"
     }
   },
   "scripts": {
