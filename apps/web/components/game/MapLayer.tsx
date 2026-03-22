@@ -3,9 +3,12 @@
 import { useMemo } from 'react'
 import * as THREE from 'three'
 import { useGameStore } from '@/lib/stores/game-store'
+import { FrustumCulledGroup } from './performance/FrustumCulledGroup'
 
 const TILE_SIZE = 1
-const TILE_COLORS: Record<string, string> = {
+const CHUNK_SIZE = 8
+
+export const TILE_COLORS: Record<string, string> = {
   'stone': '#6b7280',
   'cave-stone': '#52525b',
   'grass': '#4ade80',
@@ -35,11 +38,16 @@ export function MapLayer() {
 
   const tileColor = TILE_COLORS[mapTiles] ?? TILE_COLORS['stone']
 
-  const tiles = useMemo(() => {
-    const result: { x: number; y: number }[] = []
+  // Chunk tiles into CHUNK_SIZE groups for frustum culling
+  const chunks = useMemo(() => {
+    const result: Map<string, { x: number; y: number }[]> = new Map()
     for (let x = 0; x < mapSize[0]; x++) {
       for (let y = 0; y < mapSize[1]; y++) {
-        result.push({ x, y })
+        const cx = Math.floor(x / CHUNK_SIZE)
+        const cy = Math.floor(y / CHUNK_SIZE)
+        const key = `${cx}-${cy}`
+        if (!result.has(key)) result.set(key, [])
+        result.get(key)!.push({ x, y })
       }
     }
     return result
@@ -47,8 +55,12 @@ export function MapLayer() {
 
   return (
     <group name="map-layer">
-      {tiles.map(({ x, y }) => (
-        <Tile key={`${x}-${y}`} x={x} y={y} color={tileColor} />
+      {Array.from(chunks.entries()).map(([chunkKey, positions]) => (
+        <FrustumCulledGroup key={chunkKey} positions={positions}>
+          {positions.map(({ x, y }) => (
+            <Tile key={`${x}-${y}`} x={x} y={y} color={tileColor} />
+          ))}
+        </FrustumCulledGroup>
       ))}
       {/* Ambient light for the map */}
       <ambientLight intensity={0.6} />
