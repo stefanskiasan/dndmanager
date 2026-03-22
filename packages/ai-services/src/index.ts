@@ -31,3 +31,21 @@ export type {
   CharacterOption,
   AbilityBoostSuggestion,
 } from './types'
+
+// 3D Model Generation
+export { createMeshyClient } from './services/meshy-client'
+export type { MeshyClient, PollOptions } from './services/meshy-client'
+export { createMockMeshyClient } from './services/meshy-client.mock'
+export { optimizeModelPrompt } from './services/model-prompt-optimizer'
+export {
+  MODEL_GENERATION_SYSTEM_PROMPT,
+  buildModelUserPrompt,
+} from './prompts/model-generation'
+export type {
+  MeshyTaskStatus,
+  MeshyCreateTaskRequest,
+  MeshyTaskResponse,
+  ModelGenerationRequest,
+  OptimizedModelPrompt,
+  ModelGenerationStatus,
+} from './types'
