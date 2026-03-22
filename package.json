@@ -10,7 +10,8 @@
     "test": "turbo test",
     "test:watch": "turbo test:watch",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
-    "data:import": "pnpm --filter @dndmanager/ai-services data:import"
+    "data:import": "pnpm --filter @dndmanager/ai-services data:import",
+    "scenario:generate": "pnpm --filter @dndmanager/scene-framework scenario:generate --"
   },
   "devDependencies": {
     "prettier": "^3.4.0",
