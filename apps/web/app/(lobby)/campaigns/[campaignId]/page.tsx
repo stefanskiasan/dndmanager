@@ -67,21 +67,21 @@ export default async function CampaignDetailPage({
       <section>
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">Charaktere</h2>
-          {!isGM && !myCharacter && (
-            <Link href={`/campaigns/${campaignId}/characters/new`}>
-              <Button size="sm">Charakter erstellen</Button>
-            </Link>
-          )}
+          <Link href={`/campaigns/${campaignId}/characters/new`}>
+            <Button size="sm">Charakter erstellen</Button>
+          </Link>
         </div>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {characters && characters.length > 0 ? (
             characters.map((char) => (
-              <Card key={char.id} className={char.owner_id === user.id ? 'border-blue-500' : ''}>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{char.name}</CardTitle>
-                  <CardDescription>Level {char.level}</CardDescription>
-                </CardHeader>
-              </Card>
+              <Link key={char.id} href={`/campaigns/${campaignId}/characters/${char.id}`}>
+                <Card className={`cursor-pointer transition-colors hover:border-neutral-600 ${char.owner_id === user.id ? 'border-blue-500' : ''}`}>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">{char.name}</CardTitle>
+                    <CardDescription>Level {char.level}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
             ))
           ) : (
             <p className="text-neutral-500">Noch keine Charaktere erstellt.</p>
