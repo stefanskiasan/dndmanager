@@ -109,3 +109,63 @@ export interface ModelGenerationStatus {
   thumbnailUrl: string | null
   error: string | null
 }
+
+// ─── NPC Dialog Types ────────────────────────────
+
+/** NPC definition as consumed by the dialog engine (mirrors scene-framework NpcDef) */
+export interface NpcDialogProfile {
+  npcId: string
+  name: string
+  personality: string
+  knowledge: string[]
+  dialogueStyle: string
+  /** Optional monster reference for stat-based responses */
+  monsterRef?: string
+}
+
+/** A single message in an NPC conversation */
+export interface NpcMessage {
+  id: string
+  conversationId: string
+  role: 'player' | 'npc' | 'system'
+  content: string
+  /** GM approval status — only relevant for role: 'npc' */
+  status: 'pending' | 'approved' | 'edited' | 'rejected'
+  /** If edited, the original AI-generated text */
+  originalContent?: string
+  createdAt: string
+}
+
+/** Full NPC conversation record */
+export interface NpcConversation {
+  id: string
+  sessionId: string
+  npcId: string
+  playerId: string
+  messages: NpcMessage[]
+  createdAt: string
+  updatedAt: string
+}
+
+/** Request to generate an NPC response */
+export interface NpcDialogRequest {
+  sessionId: string
+  npcId: string
+  playerMessage: string
+}
+
+/** Response from the NPC dialog generation service */
+export interface NpcDialogResponse {
+  messageId: string
+  conversationId: string
+  npcMessage: string
+  status: 'pending'
+}
+
+/** GM approval action */
+export interface NpcApprovalAction {
+  messageId: string
+  action: 'approve' | 'edit' | 'reject'
+  /** Required when action is 'edit' */
+  editedContent?: string
+}
