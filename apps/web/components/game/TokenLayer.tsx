@@ -1,9 +1,10 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import * as THREE from 'three'
 import { useGameStore } from '@/lib/stores/game-store'
 import { CharacterModel } from './CharacterModel'
+import { InstancedTokenGroup } from './performance/InstancedTokenGroup'
 import type { Token } from '@dndmanager/game-runtime'
 
 const TILE_SIZE = 1
@@ -77,9 +78,37 @@ export function TokenLayer() {
   const selectedTokenId = useGameStore((s) => s.selectedTokenId)
   const selectToken = useGameStore((s) => s.selectToken)
 
+  // Group monster tokens without models by type for instancing
+  const { instanceGroups, individualTokens } = useMemo(() => {
+    const groups: Record<string, Token[]> = {}
+    const individual: Token[] = []
+
+    tokens.forEach((token) => {
+      const modelUrl = (token as Token & { modelUrl?: string }).modelUrl
+      if (token.type === 'monster' && !modelUrl) {
+        const key = token.name
+        ;(groups[key] ??= []).push(token)
+      } else {
+        individual.push(token)
+      }
+    })
+
+    return { instanceGroups: groups, individualTokens: individual }
+  }, [tokens])
+
   return (
     <group name="token-layer">
-      {tokens.map((token) => (
+      {/* Instanced groups for duplicate monster tokens (single draw call per group) */}
+      {Object.entries(instanceGroups).map(([name, groupTokens]) => (
+        <InstancedTokenGroup
+          key={`instanced-${name}`}
+          tokens={groupTokens}
+          color={TOKEN_COLORS['monster'] ?? '#9ca3af'}
+        />
+      ))}
+
+      {/* Individual tokens (players, NPCs, tokens with custom models) */}
+      {individualTokens.map((token) => (
         <TokenMesh
           key={token.id}
           token={token}
