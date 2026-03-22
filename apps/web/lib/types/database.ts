@@ -1,5 +1,13 @@
 // Placeholder — will be regenerated from `supabase gen types typescript`
 // when Supabase is connected
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
 export type Database = {
   public: {
     Tables: {
@@ -326,6 +334,497 @@ export type Database = {
             referencedColumns: ['id']
           },
         ]
+      }
+      session_journals: {
+        Row: {
+          id: string
+          session_id: string
+          campaign_id: string
+          title: string
+          narrative: string
+          highlights: unknown[]
+          combat_summary: string | null
+          generated_at: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          session_id: string
+          campaign_id: string
+          title: string
+          narrative: string
+          highlights?: unknown[]
+          combat_summary?: string | null
+          generated_at?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          session_id?: string
+          campaign_id?: string
+          title?: string
+          narrative?: string
+          highlights?: unknown[]
+          combat_summary?: string | null
+          generated_at?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'session_journals_session_id_fkey'
+            columns: ['session_id']
+            isOneToOne: true
+            referencedRelation: 'sessions'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'session_journals_campaign_id_fkey'
+            columns: ['campaign_id']
+            isOneToOne: false
+            referencedRelation: 'campaigns'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      npc_conversations: {
+        Row: {
+          id: string
+          session_id: string
+          npc_id: string
+          player_id: string
+          npc_name: string
+          npc_profile: unknown
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          session_id: string
+          npc_id: string
+          player_id: string
+          npc_name: string
+          npc_profile?: unknown
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          session_id?: string
+          npc_id?: string
+          player_id?: string
+          npc_name?: string
+          npc_profile?: unknown
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'npc_conversations_session_id_fkey'
+            columns: ['session_id']
+            isOneToOne: false
+            referencedRelation: 'sessions'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'npc_conversations_player_id_fkey'
+            columns: ['player_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      npc_messages: {
+        Row: {
+          id: string
+          conversation_id: string
+          role: string
+          content: string
+          status: string
+          original_content: string | null
+          token_count_input: number | null
+          token_count_output: number | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          role: string
+          content: string
+          status?: string
+          original_content?: string | null
+          token_count_input?: number | null
+          token_count_output?: number | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          role?: string
+          content?: string
+          status?: string
+          original_content?: string | null
+          token_count_input?: number | null
+          token_count_output?: number | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'npc_messages_conversation_id_fkey'
+            columns: ['conversation_id']
+            isOneToOne: false
+            referencedRelation: 'npc_conversations'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      pf2e_ancestries: {
+        Row: {
+          id: string
+          name: string
+          source_id: string
+          hp: number
+          size: string
+          speed: number
+          ability_boosts: unknown[]
+          ability_flaws: unknown[]
+          languages: unknown[]
+          traits: unknown[]
+          features: unknown[]
+          description: string
+          source: string
+          imported_at: string
+        }
+        Insert: {
+          id: string
+          name: string
+          source_id: string
+          hp: number
+          size: string
+          speed: number
+          ability_boosts?: unknown[]
+          ability_flaws?: unknown[]
+          languages?: unknown[]
+          traits?: unknown[]
+          features?: unknown[]
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          source_id?: string
+          hp?: number
+          size?: string
+          speed?: number
+          ability_boosts?: unknown[]
+          ability_flaws?: unknown[]
+          languages?: unknown[]
+          traits?: unknown[]
+          features?: unknown[]
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Relationships: []
+      }
+      pf2e_classes: {
+        Row: {
+          id: string
+          name: string
+          source_id: string
+          hp: number
+          key_ability: Record<string, unknown>
+          proficiencies: unknown[]
+          skill_trained_count: number
+          attack_proficiency: string
+          defense_proficiency: string
+          perception: string
+          fortitude: string
+          reflex: string
+          will: string
+          description: string
+          source: string
+          imported_at: string
+        }
+        Insert: {
+          id: string
+          name: string
+          source_id: string
+          hp: number
+          key_ability: Record<string, unknown>
+          proficiencies?: unknown[]
+          skill_trained_count?: number
+          attack_proficiency: string
+          defense_proficiency: string
+          perception: string
+          fortitude: string
+          reflex: string
+          will: string
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          source_id?: string
+          hp?: number
+          key_ability?: Record<string, unknown>
+          proficiencies?: unknown[]
+          skill_trained_count?: number
+          attack_proficiency?: string
+          defense_proficiency?: string
+          perception?: string
+          fortitude?: string
+          reflex?: string
+          will?: string
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Relationships: []
+      }
+      pf2e_feats: {
+        Row: {
+          id: string
+          name: string
+          source_id: string
+          level: number
+          feat_type: string
+          action_cost: string
+          traits: unknown[]
+          prerequisites: unknown[]
+          description: string
+          source: string
+          imported_at: string
+        }
+        Insert: {
+          id: string
+          name: string
+          source_id: string
+          level?: number
+          feat_type: string
+          action_cost?: string
+          traits?: unknown[]
+          prerequisites?: unknown[]
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          source_id?: string
+          level?: number
+          feat_type?: string
+          action_cost?: string
+          traits?: unknown[]
+          prerequisites?: unknown[]
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Relationships: []
+      }
+      pf2e_spells: {
+        Row: {
+          id: string
+          name: string
+          source_id: string
+          level: number
+          traditions: unknown[]
+          school: string | null
+          components: unknown[]
+          cast_actions: string
+          range: number | null
+          area: Record<string, unknown> | null
+          save: Record<string, unknown> | null
+          damage: Record<string, unknown> | null
+          duration: string | null
+          sustained: boolean
+          traits: unknown[]
+          description: string
+          heightening: Record<string, unknown> | null
+          source: string
+          imported_at: string
+        }
+        Insert: {
+          id: string
+          name: string
+          source_id: string
+          level?: number
+          traditions?: unknown[]
+          school?: string | null
+          components?: unknown[]
+          cast_actions: string
+          range?: number | null
+          area?: Record<string, unknown> | null
+          save?: Record<string, unknown> | null
+          damage?: Record<string, unknown> | null
+          duration?: string | null
+          sustained?: boolean
+          traits?: unknown[]
+          description?: string
+          heightening?: Record<string, unknown> | null
+          source?: string
+          imported_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          source_id?: string
+          level?: number
+          traditions?: unknown[]
+          school?: string | null
+          components?: unknown[]
+          cast_actions?: string
+          range?: number | null
+          area?: Record<string, unknown> | null
+          save?: Record<string, unknown> | null
+          damage?: Record<string, unknown> | null
+          duration?: string | null
+          sustained?: boolean
+          traits?: unknown[]
+          description?: string
+          heightening?: Record<string, unknown> | null
+          source?: string
+          imported_at?: string
+        }
+        Relationships: []
+      }
+      pf2e_items: {
+        Row: {
+          id: string
+          name: string
+          source_id: string
+          item_type: string
+          level: number
+          price: Record<string, unknown>
+          bulk: string
+          traits: unknown[]
+          weapon_stats: Record<string, unknown> | null
+          armor_stats: Record<string, unknown> | null
+          description: string
+          source: string
+          imported_at: string
+        }
+        Insert: {
+          id: string
+          name: string
+          source_id: string
+          item_type: string
+          level?: number
+          price?: Record<string, unknown>
+          bulk?: string
+          traits?: unknown[]
+          weapon_stats?: Record<string, unknown> | null
+          armor_stats?: Record<string, unknown> | null
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          source_id?: string
+          item_type?: string
+          level?: number
+          price?: Record<string, unknown>
+          bulk?: string
+          traits?: unknown[]
+          weapon_stats?: Record<string, unknown> | null
+          armor_stats?: Record<string, unknown> | null
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Relationships: []
+      }
+      pf2e_monsters: {
+        Row: {
+          id: string
+          name: string
+          source_id: string
+          level: number
+          traits: unknown[]
+          size: string
+          alignment: string | null
+          hp: number
+          ac: number
+          fortitude: number
+          reflex: number
+          will: number
+          perception: number
+          speed: number
+          abilities: Record<string, unknown>
+          immunities: unknown[]
+          resistances: Record<string, unknown>
+          weaknesses: Record<string, unknown>
+          strikes: unknown[]
+          spellcasting: Record<string, unknown> | null
+          special_abilities: unknown[]
+          description: string
+          source: string
+          imported_at: string
+        }
+        Insert: {
+          id: string
+          name: string
+          source_id: string
+          level: number
+          traits?: unknown[]
+          size: string
+          alignment?: string | null
+          hp: number
+          ac: number
+          fortitude: number
+          reflex: number
+          will: number
+          perception: number
+          speed: number
+          abilities: Record<string, unknown>
+          immunities?: unknown[]
+          resistances?: Record<string, unknown>
+          weaknesses?: Record<string, unknown>
+          strikes?: unknown[]
+          spellcasting?: Record<string, unknown> | null
+          special_abilities?: unknown[]
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          source_id?: string
+          level?: number
+          traits?: unknown[]
+          size?: string
+          alignment?: string | null
+          hp?: number
+          ac?: number
+          fortitude?: number
+          reflex?: number
+          will?: number
+          perception?: number
+          speed?: number
+          abilities?: Record<string, unknown>
+          immunities?: unknown[]
+          resistances?: Record<string, unknown>
+          weaknesses?: Record<string, unknown>
+          strikes?: unknown[]
+          spellcasting?: Record<string, unknown> | null
+          special_abilities?: unknown[]
+          description?: string
+          source?: string
+          imported_at?: string
+        }
+        Relationships: []
       }
       characters: {
         Row: {
