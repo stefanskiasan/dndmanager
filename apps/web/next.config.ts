@@ -8,6 +8,13 @@ const nextConfig: NextConfig = {
     '@dndmanager/scene-framework',
     '@dndmanager/ai-services',
   ],
+  webpack: (config) => {
+    // Resolve .js imports to .ts files in workspace packages
+    config.resolve.extensionAlias = {
+      '.js': ['.ts', '.tsx', '.js', '.jsx'],
+    }
+    return config
+  },
 }
 
 export default nextConfig
