@@ -99,19 +99,33 @@ const buildSchema = z.object({
   spellCasters: z.array(spellCasterSchema),
   skills: z.record(z.string(), z.number()),
   hitpoints: z.number().int().min(1),
-  // Fields we accept but don't strictly require exact shapes for:
-  equipment: z.array(z.unknown()).optional(),
-  specificProficiencies: z.unknown().optional(),
-  focusPoints: z.number().optional(),
-  focus: z.unknown().optional(),
-  pets: z.array(z.unknown()).optional(),
-  acTotal: z.unknown().optional(),
-  familiars: z.array(z.unknown()).optional(),
-  formula: z.array(z.unknown()).optional(),
-  bulk: z.number().optional(),
-  rituals: z.array(z.unknown()).optional(),
-  resistances: z.array(z.unknown()).optional(),
-  inventorMods: z.array(z.unknown()).optional(),
+  // Required fields with relaxed inner types:
+  equipment: z.array(z.tuple([z.string(), z.number()])).default([]),
+  specificProficiencies: z.object({
+    trained: z.array(z.string()),
+    expert: z.array(z.string()),
+    master: z.array(z.string()),
+    legendary: z.array(z.string()),
+  }).default({ trained: [], expert: [], master: [], legendary: [] }),
+  focusPoints: z.number().default(0),
+  focus: z.record(z.string(), z.object({
+    focusCantrips: z.array(z.string()),
+    focusSpells: z.array(z.string()),
+  })).default({}),
+  pets: z.array(z.unknown()).default([]),
+  acTotal: z.object({
+    acProfBonus: z.number(),
+    acAbilityBonus: z.number(),
+    acItemBonus: z.number(),
+    acTotal: z.number(),
+    shieldBonus: z.number().nullable(),
+  }).default({ acProfBonus: 0, acAbilityBonus: 0, acItemBonus: 0, acTotal: 10, shieldBonus: null }),
+  familiars: z.array(z.unknown()).default([]),
+  formula: z.array(z.string()).default([]),
+  bulk: z.number().default(0),
+  rituals: z.array(z.string()).default([]),
+  resistances: z.array(z.string()).default([]),
+  inventorMods: z.array(z.string()).default([]),
 })
 
 export const pathbuilderExportSchema = z.object({

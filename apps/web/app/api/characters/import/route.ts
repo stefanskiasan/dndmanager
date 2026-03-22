@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { pathbuilderExportSchema } from '@/lib/schemas/pathbuilder'
-import { mapPathbuilderToCharacter, validateCharacterData } from '@dndmanager/pf2e-engine/pathbuilder'
+import { mapPathbuilderToCharacter, validateCharacterData, type PathbuilderExport } from '@dndmanager/pf2e-engine/pathbuilder'
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
@@ -52,8 +52,8 @@ export async function POST(request: NextRequest) {
     }, { status: 422 })
   }
 
-  // Map to our format
-  const { name, level, data } = mapPathbuilderToCharacter(parseResult.data)
+  // Map to our format — Zod output is structurally compatible after validation
+  const { name, level, data } = mapPathbuilderToCharacter(parseResult.data as unknown as PathbuilderExport)
 
   // Validate against pf2e rules
   const validation = validateCharacterData(data)
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       xp: 0,
       owner_id: user.id,
       campaign_id: campaignId,
-      data,
+      data: data as unknown as Record<string, unknown>,
     })
     .select('id, name')
     .single()

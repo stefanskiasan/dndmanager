@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { PathbuilderPreview } from './PathbuilderPreview'
-import { mapPathbuilderToCharacter, validateCharacterData } from '@dndmanager/pf2e-engine/pathbuilder'
+import { mapPathbuilderToCharacter, validateCharacterData, type PathbuilderExport } from '@dndmanager/pf2e-engine/pathbuilder'
 import { pathbuilderExportSchema } from '@/lib/schemas/pathbuilder'
 import type { CharacterData } from '@dndmanager/pf2e-engine/pathbuilder'
 
@@ -44,8 +44,8 @@ export function PathbuilderImport({ campaignId }: PathbuilderImportProps) {
           return
         }
 
-        // Map to our format
-        const { name, data } = mapPathbuilderToCharacter(parseResult.data)
+        // Map to our format — Zod output is structurally compatible after validation
+        const { name, data } = mapPathbuilderToCharacter(parseResult.data as unknown as PathbuilderExport)
 
         // Validate against rules
         const validation = validateCharacterData(data)
