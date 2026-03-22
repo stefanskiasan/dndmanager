@@ -89,3 +89,17 @@ export type {
   SessionJournal,
   JournalGenerateRequest,
 } from './types'
+
+// Feat Recommendation
+export { recommendFeats } from './services/feat-recommendation'
+export {
+  FEAT_RECOMMENDATION_SYSTEM_PROMPT,
+  buildFeatRecommendationPrompt,
+} from './prompts/feat-recommendation'
+export type {
+  FeatRecommendationRequest,
+  FeatRecommendationResponse,
+  FeatRecommendation,
+  CharacterBuildContext,
+  PartyContext,
+} from './types'
