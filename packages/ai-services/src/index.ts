@@ -49,3 +49,20 @@ export type {
   OptimizedModelPrompt,
   ModelGenerationStatus,
 } from './types'
+
+// NPC Dialog
+export { generateNpcResponse } from './services/npc-dialog'
+export type { GenerateNpcResponseParams, GenerateNpcResponseResult } from './services/npc-dialog'
+export {
+  buildNpcSystemPrompt,
+  buildConversationMessages,
+  buildGmContextInjection,
+} from './prompts/npc-dialog'
+export type {
+  NpcDialogProfile,
+  NpcMessage,
+  NpcConversation,
+  NpcDialogRequest,
+  NpcDialogResponse,
+  NpcApprovalAction,
+} from './types'
