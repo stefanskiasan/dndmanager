@@ -164,3 +164,99 @@ export interface SpellcastingState {
   knownSpells: string[]        // spell IDs
   preparedSpells?: string[]    // for prepared casters
 }
+
+// ─── Items ───────────────────────────────────
+export type ItemCategory = 'weapon' | 'armor' | 'consumable' | 'wondrous'
+
+export type WeaponGroup =
+  | 'sword' | 'axe' | 'club' | 'flail' | 'hammer'
+  | 'knife' | 'polearm' | 'spear' | 'bow' | 'crossbow'
+  | 'sling' | 'dart' | 'brawling' | 'shield'
+
+export type ArmorCategory = 'unarmored' | 'light' | 'medium' | 'heavy'
+
+export type Rarity = 'common' | 'uncommon' | 'rare' | 'unique'
+
+export interface Price {
+  pp?: number
+  gp?: number
+  sp?: number
+  cp?: number
+}
+
+/**
+ * Bulk in PF2e: whole numbers (1, 2, 3...) or L (light = 0.1 by convention).
+ * We store as a number: 1 = 1 bulk, 0.1 = L, 0 = negligible.
+ */
+export type BulkValue = number
+
+export interface BaseItem {
+  id: string
+  name: string
+  level: number
+  category: ItemCategory
+  rarity: Rarity
+  price: Price
+  bulk: BulkValue
+  description: string
+  traits: string[]
+  quantity: number
+  invested?: boolean
+}
+
+export interface WeaponItem extends BaseItem {
+  category: 'weapon'
+  weaponGroup: WeaponGroup
+  damage: { dice: number; sides: number; type: DamageType }
+  range?: number           // ranged/thrown range in feet
+  reload?: number          // 0, 1, 2
+  hands: 1 | 2 | '1+'     // 1+: versatile grip
+  weaponTraits: string[]   // agile, finesse, reach, etc.
+  potencyRune: 0 | 1 | 2 | 3
+  strikingRune: 0 | 1 | 2 | 3
+  propertyRunes: string[]
+}
+
+export interface ArmorItem extends BaseItem {
+  category: 'armor'
+  armorCategory: ArmorCategory
+  acBonus: number
+  dexCap: number | null    // null = no cap (unarmored)
+  checkPenalty: number
+  speedPenalty: number
+  strength: number | null  // STR required to ignore speed penalty
+  potencyRune: 0 | 1 | 2 | 3
+  resiliencyRune: 0 | 1 | 2 | 3
+  propertyRunes: string[]
+}
+
+export interface ConsumableItem extends BaseItem {
+  category: 'consumable'
+  consumableType: 'potion' | 'elixir' | 'scroll' | 'talisman' | 'bomb' | 'poison' | 'ammunition' | 'oil' | 'snare' | 'other'
+  activationActions?: ActionCost
+  effect?: string
+}
+
+export interface WondrousItem extends BaseItem {
+  category: 'wondrous'
+  slot?: 'worn' | 'held' | 'affixed' | 'etched' | null
+  activationActions?: ActionCost
+  usesPerDay?: number
+  usesRemaining?: number
+}
+
+export type Item = WeaponItem | ArmorItem | ConsumableItem | WondrousItem
+
+// ─── Currency ────────────────────────────────
+export interface Currency {
+  pp: number  // platinum
+  gp: number  // gold
+  sp: number  // silver
+  cp: number  // copper
+}
+
+// ─── Inventory ───────────────────────────────
+export interface Inventory {
+  items: Item[]
+  currency: Currency
+}
