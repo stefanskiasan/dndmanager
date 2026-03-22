@@ -66,3 +66,26 @@ export type {
   NpcDialogResponse,
   NpcApprovalAction,
 } from './types'
+
+// Co-GM Assistant
+export { streamCoGMResponse, askCoGM } from './cogm/co-gm-service'
+export {
+  COGM_SYSTEM_PROMPT,
+  buildGameContextBlock,
+} from './cogm/co-gm-prompts'
+export type {
+  CoGMMessage,
+  CoGMRequest,
+  GameContextSnapshot,
+} from './types'
+
+// Session Journal
+export { generateSessionJournal } from './journal/journal-generator'
+export {
+  JOURNAL_SYSTEM_PROMPT,
+  buildJournalPrompt,
+} from './journal/journal-prompts'
+export type {
+  SessionJournal,
+  JournalGenerateRequest,
+} from './types'
