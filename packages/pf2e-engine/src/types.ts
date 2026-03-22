@@ -128,3 +128,39 @@ export interface ActionContext {
   speed: number         // in feet
   position: [number, number]
 }
+
+// ─── Spells ───────────────────────────────────
+export type SpellTradition = 'arcane' | 'divine' | 'occult' | 'primal'
+export type SpellComponent = 'somatic' | 'verbal' | 'material' | 'focus'
+
+export interface SpellSlot {
+  level: number        // 1-10
+  max: number
+  used: number
+}
+
+export interface SpellDefinition {
+  id: string
+  name: string
+  level: number
+  traditions: SpellTradition[]
+  components: SpellComponent[]
+  castActions: ActionCost
+  range?: number       // in feet
+  area?: { type: 'burst' | 'cone' | 'line' | 'emanation'; size: number }
+  save?: { type: 'fortitude' | 'reflex' | 'will'; basic: boolean }
+  damage?: {
+    formula: string    // e.g. "6d6"
+    type: DamageType
+    heightenedPerLevel?: string  // e.g. "2d6" per level above base
+  }
+  description: string
+}
+
+export interface SpellcastingState {
+  tradition: SpellTradition
+  abilityId: AbilityId
+  slots: SpellSlot[]
+  knownSpells: string[]        // spell IDs
+  preparedSpells?: string[]    // for prepared casters
+}
