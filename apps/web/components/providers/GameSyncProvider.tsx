@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { subscribeToGameState } from '@/lib/sync/game-sync'
 import { loadGameState } from '@/lib/sync/game-actions'
 import { useGameStore } from '@/lib/stores/game-store'
-import type { Token, ActiveCondition } from '@dndmanager/game-runtime'
+import type { Token } from '@dndmanager/game-runtime'
 
 interface GameSyncProviderProps {
   sessionId: string
@@ -47,7 +47,7 @@ export function GameSyncProvider({ sessionId, children }: GameSyncProviderProps)
             speed: t.speed,
             hp: { current: t.hp_current, max: t.hp_max, temp: t.hp_temp },
             ac: t.ac,
-            conditions: (t.conditions ?? []) as ActiveCondition[],
+            conditions: (t.conditions ?? []) as Token['conditions'],
             visible: t.visible,
           }))
         )

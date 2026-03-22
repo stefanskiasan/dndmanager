@@ -2,7 +2,7 @@ import type { SupabaseClient, RealtimeChannel } from '@supabase/supabase-js'
 import type { Database } from '../types/database.js'
 import type { GameTokenRow, GameStateRow } from './types.js'
 import { useGameStore } from '../stores/game-store.js'
-import type { Token, ActiveCondition } from '@dndmanager/game-runtime'
+import type { Token } from '@dndmanager/game-runtime'
 
 type Client = SupabaseClient<Database>
 
@@ -16,7 +16,7 @@ function tokenRowToToken(row: GameTokenRow): Token {
     speed: row.speed,
     hp: { current: row.hp_current, max: row.hp_max, temp: row.hp_temp },
     ac: row.ac,
-    conditions: (row.conditions ?? []) as ActiveCondition[],
+    conditions: (row.conditions ?? []) as Token['conditions'],
     visible: row.visible,
   }
 }

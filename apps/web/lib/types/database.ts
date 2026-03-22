@@ -148,6 +148,185 @@ export type Database = {
           },
         ]
       }
+      game_state: {
+        Row: {
+          id: string
+          session_id: string
+          mode: string
+          round: number
+          current_turn_index: number
+          current_token_id: string | null
+          actions_remaining: number
+          reaction_available: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          session_id: string
+          mode?: string
+          round?: number
+          current_turn_index?: number
+          current_token_id?: string | null
+          actions_remaining?: number
+          reaction_available?: boolean
+        }
+        Update: {
+          id?: string
+          session_id?: string
+          mode?: string
+          round?: number
+          current_turn_index?: number
+          current_token_id?: string | null
+          actions_remaining?: number
+          reaction_available?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'game_state_session_id_fkey'
+            columns: ['session_id']
+            isOneToOne: true
+            referencedRelation: 'sessions'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      game_tokens: {
+        Row: {
+          id: string
+          game_state_id: string
+          name: string
+          token_type: string
+          owner_id: string | null
+          position_x: number
+          position_y: number
+          speed: number
+          hp_current: number
+          hp_max: number
+          hp_temp: number
+          ac: number
+          conditions: unknown[]
+          visible: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          game_state_id: string
+          name: string
+          token_type: string
+          owner_id?: string | null
+          position_x?: number
+          position_y?: number
+          speed?: number
+          hp_current: number
+          hp_max: number
+          hp_temp?: number
+          ac: number
+          conditions?: unknown[]
+          visible?: boolean
+        }
+        Update: {
+          id?: string
+          game_state_id?: string
+          name?: string
+          token_type?: string
+          owner_id?: string | null
+          position_x?: number
+          position_y?: number
+          speed?: number
+          hp_current?: number
+          hp_max?: number
+          hp_temp?: number
+          ac?: number
+          conditions?: unknown[]
+          visible?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'game_tokens_game_state_id_fkey'
+            columns: ['game_state_id']
+            isOneToOne: false
+            referencedRelation: 'game_state'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'game_tokens_owner_id_fkey'
+            columns: ['owner_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      game_initiative: {
+        Row: {
+          id: string
+          game_state_id: string
+          token_id: string
+          roll: number
+          modifier: number
+          total: number
+          sort_order: number
+        }
+        Insert: {
+          id?: string
+          game_state_id: string
+          token_id: string
+          roll: number
+          modifier?: number
+          total: number
+          sort_order?: number
+        }
+        Update: {
+          id?: string
+          game_state_id?: string
+          token_id?: string
+          roll?: number
+          modifier?: number
+          total?: number
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'game_initiative_game_state_id_fkey'
+            columns: ['game_state_id']
+            isOneToOne: false
+            referencedRelation: 'game_state'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      game_action_log: {
+        Row: {
+          id: string
+          game_state_id: string
+          event_type: string
+          data: Record<string, unknown>
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          game_state_id: string
+          event_type: string
+          data?: Record<string, unknown>
+        }
+        Update: {
+          id?: string
+          game_state_id?: string
+          event_type?: string
+          data?: Record<string, unknown>
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'game_action_log_game_state_id_fkey'
+            columns: ['game_state_id']
+            isOneToOne: false
+            referencedRelation: 'game_state'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       characters: {
         Row: {
           id: string
