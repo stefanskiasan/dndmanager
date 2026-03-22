@@ -1,5 +1,7 @@
 import type { GridPosition } from '../types.js'
 
+export type { GridPosition }
+
 export type Visibility = 'visible' | 'dim' | 'hidden'
 export type SenseType = 'normal' | 'low-light' | 'darkvision'
 export type LightLevel = 'bright' | 'dim' | 'darkness'

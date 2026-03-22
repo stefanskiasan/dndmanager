@@ -26,6 +26,9 @@ importers:
       '@dndmanager/game-runtime':
         specifier: workspace:*
         version: link:../../packages/game-runtime
+      '@dndmanager/pf2e-engine':
+        specifier: workspace:*
+        version: link:../../packages/pf2e-engine
       '@dndmanager/shared':
         specifier: workspace:*
         version: link:../../packages/shared

@@ -1,6 +1,7 @@
 'use client'
 
 import { useGameStore } from '@/lib/stores/game-store'
+import { ActionMenu } from './actions/ActionMenu'
 
 export function InitiativeBar() {
   const mode = useGameStore((s) => s.mode)
@@ -47,20 +48,7 @@ export function ActionBar() {
   return (
     <div className="absolute bottom-0 left-0 right-0 z-10 bg-neutral-900/80 px-4 py-3 backdrop-blur-sm">
       <div className="mx-auto flex max-w-2xl items-center justify-between">
-        <div className="flex gap-2">
-          <button className="rounded bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-600">
-            Strike
-          </button>
-          <button className="rounded bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-600">
-            Move
-          </button>
-          <button className="rounded bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-600">
-            Cast
-          </button>
-          <button className="rounded bg-yellow-700 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600">
-            Skill
-          </button>
-        </div>
+        <ActionMenu />
         <div className="flex items-center gap-3">
           <div className="flex gap-1">
             {[1, 2, 3].map((i) => (
