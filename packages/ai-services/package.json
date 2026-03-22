@@ -15,6 +15,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
     "@dndmanager/shared": "workspace:*"
   },
   "devDependencies": {
