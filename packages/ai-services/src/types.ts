@@ -231,3 +231,54 @@ export interface JournalGenerateRequest {
   partyMembers: string[] // character names
   campaignSetting?: string
 }
+
+// ─── Feat Recommendation Types ──────────────
+
+/** Context about a character's current build for AI analysis */
+export interface CharacterBuildContext {
+  name: string
+  level: number
+  className: string
+  ancestry: string
+  background: string
+  abilityScores: Record<string, number>
+  currentFeats: string[]
+  skills: { name: string; rank: string }[]
+  playStyle?: string               // e.g. "aggressive melee", "support caster"
+}
+
+/** Context about the party for AI-aware recommendations */
+export interface PartyContext {
+  members: {
+    name: string
+    className: string
+    level: number
+    role?: string                   // e.g. "tank", "healer", "damage", "utility"
+  }[]
+}
+
+/** Request for AI feat recommendations */
+export interface FeatRecommendationRequest {
+  character: CharacterBuildContext
+  party?: PartyContext
+  featType: 'class' | 'skill' | 'general' | 'ancestry'
+  maxFeatLevel: number
+}
+
+/** A single AI-recommended feat */
+export interface FeatRecommendation {
+  name: string
+  level: number
+  type: 'class' | 'skill' | 'general' | 'ancestry'
+  description: string
+  reasoning: string                 // Why this feat suits the character/party
+  synergies: string[]               // Existing feats/features it synergizes with
+  priority: 'top-pick' | 'strong' | 'situational'
+}
+
+/** Full AI feat recommendation response */
+export interface FeatRecommendationResponse {
+  recommendations: FeatRecommendation[]
+  buildAnalysis: string             // Brief analysis of the character's current build
+  partyGapAnalysis?: string         // What roles/capabilities the party is missing
+}
