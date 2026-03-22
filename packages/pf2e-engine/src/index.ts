@@ -18,6 +18,7 @@ export * from './inventory.js'
 export * from './currency.js'
 export * from './loot-tables.js'
 export * from './level-up.js'
+export * from './downtime.js'
 
 // ─── Pathbuilder Import ──────────────────────────
 export {
