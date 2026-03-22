@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { CharacterForm } from '@/components/character/CharacterForm'
@@ -31,6 +32,17 @@ export default async function NewCharacterPage({
         </CardHeader>
         <CardContent>
           <CharacterForm campaignId={campaignId} />
+        </CardContent>
+        <CardContent className="border-t border-neutral-800 pt-4">
+          <p className="text-sm text-neutral-400 text-center">
+            Oder{' '}
+            <Link
+              href={`/campaigns/${campaignId}/characters/import`}
+              className="text-blue-400 hover:underline"
+            >
+              Charakter aus Pathbuilder 2e importieren
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </main>

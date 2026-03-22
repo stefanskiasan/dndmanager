@@ -17,3 +17,14 @@ export * from './items.js'
 export * from './inventory.js'
 export * from './currency.js'
 export * from './loot-tables.js'
+
+// ─── Pathbuilder Import ──────────────────────────
+export {
+  mapPathbuilderToCharacter,
+  numericToRank,
+  validateCharacterData,
+  type CharacterData,
+  type PathbuilderExport,
+  type ValidationResult,
+  type ValidationError,
+} from './pathbuilder/index.js'
