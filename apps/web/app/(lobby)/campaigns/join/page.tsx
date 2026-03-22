@@ -27,8 +27,11 @@ export default function JoinCampaignPage() {
       return
     }
 
-    const { error: joinError } = await supabase
-      .rpc('join_campaign_by_invite_code', { code: inviteCode.trim() })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: joinError } = await (supabase.rpc as any)(
+      'join_campaign_by_invite_code',
+      { code: inviteCode.trim() }
+    )
 
     if (joinError) {
       if (joinError.message.includes('Campaign not found')) {

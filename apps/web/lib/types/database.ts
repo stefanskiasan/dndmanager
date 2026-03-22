@@ -28,6 +28,7 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       campaigns: {
         Row: {
@@ -60,6 +61,15 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'campaigns_gm_id_fkey'
+            columns: ['gm_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+        ]
       }
       campaign_members: {
         Row: {
@@ -83,6 +93,22 @@ export type Database = {
           role?: string
           joined_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'campaign_members_campaign_id_fkey'
+            columns: ['campaign_id']
+            isOneToOne: false
+            referencedRelation: 'campaigns'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'campaign_members_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+        ]
       }
       sessions: {
         Row: {
@@ -112,6 +138,15 @@ export type Database = {
           ended_at?: string | null
           created_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'sessions_campaign_id_fkey'
+            columns: ['campaign_id']
+            isOneToOne: false
+            referencedRelation: 'campaigns'
+            referencedColumns: ['id']
+          },
+        ]
       }
       characters: {
         Row: {
@@ -147,6 +182,22 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'characters_owner_id_fkey'
+            columns: ['owner_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'characters_campaign_id_fkey'
+            columns: ['campaign_id']
+            isOneToOne: false
+            referencedRelation: 'campaigns'
+            referencedColumns: ['id']
+          },
+        ]
       }
     }
     Views: Record<string, never>
@@ -157,5 +208,6 @@ export type Database = {
       }
     }
     Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }
