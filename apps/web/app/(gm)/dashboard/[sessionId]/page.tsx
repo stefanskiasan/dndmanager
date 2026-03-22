@@ -1,11 +1,14 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { useGameStore } from '@/lib/stores/game-store'
 import { EncounterPanel } from '@/components/gm/EncounterPanel'
 import { MonsterSpawner } from '@/components/gm/MonsterSpawner'
 import { TurnControls } from '@/components/gm/TurnControls'
+import { CoGMPanel } from '@/components/gm/cogm/CoGMPanel'
+import { cn } from '@/lib/utils'
 import type { Token } from '@dndmanager/game-runtime'
 
 const GameCanvas = dynamic(
@@ -40,7 +43,12 @@ const MOCK_PLAYER_TOKENS: Token[] = [
   },
 ]
 
+type SidebarTab = 'controls' | 'cogm'
+
 export default function GMDashboardPage() {
+  const params = useParams()
+  const sessionId = params.sessionId as string
+  const [activeTab, setActiveTab] = useState<SidebarTab>('controls')
   const setTokens = useGameStore((s) => s.setTokens)
   const setMap = useGameStore((s) => s.setMap)
 
@@ -52,17 +60,54 @@ export default function GMDashboardPage() {
   return (
     <div className="flex h-screen bg-neutral-950">
       {/* Sidebar */}
-      <div className="w-80 space-y-4 overflow-y-auto border-r border-neutral-800 p-4">
-        <h1 className="text-xl font-bold">GM Dashboard</h1>
-        <EncounterPanel />
-        <MonsterSpawner />
-        <TurnControls />
-
-        {/* Token list */}
-        <div className="rounded border border-neutral-800 p-3">
-          <h3 className="mb-2 text-sm font-medium text-neutral-400">Tokens auf der Karte</h3>
-          <TokenList />
+      <div className="flex w-80 flex-col border-r border-neutral-800">
+        {/* Tab bar */}
+        <div className="flex border-b border-neutral-800">
+          <button
+            onClick={() => setActiveTab('controls')}
+            className={cn(
+              'flex-1 px-3 py-2 text-sm font-medium',
+              activeTab === 'controls'
+                ? 'border-b-2 border-amber-500 text-white'
+                : 'text-neutral-500 hover:text-neutral-300'
+            )}
+          >
+            Controls
+          </button>
+          <button
+            onClick={() => setActiveTab('cogm')}
+            className={cn(
+              'flex-1 px-3 py-2 text-sm font-medium',
+              activeTab === 'cogm'
+                ? 'border-b-2 border-amber-500 text-white'
+                : 'text-neutral-500 hover:text-neutral-300'
+            )}
+          >
+            Co-GM
+          </button>
         </div>
+
+        {/* Tab content */}
+        {activeTab === 'controls' && (
+          <div className="flex-1 space-y-4 overflow-y-auto p-4">
+            <h1 className="text-xl font-bold">GM Dashboard</h1>
+            <EncounterPanel />
+            <MonsterSpawner />
+            <TurnControls />
+
+            {/* Token list */}
+            <div className="rounded border border-neutral-800 p-3">
+              <h3 className="mb-2 text-sm font-medium text-neutral-400">Tokens auf der Karte</h3>
+              <TokenList />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'cogm' && (
+          <div className="flex-1 overflow-hidden">
+            <CoGMPanel sessionId={sessionId} />
+          </div>
+        )}
       </div>
 
       {/* Game view */}
