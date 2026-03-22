@@ -5,6 +5,7 @@ import * as THREE from 'three'
 import { useGameStore } from '@/lib/stores/game-store'
 import { CharacterModel } from './CharacterModel'
 import { InstancedTokenGroup } from './performance/InstancedTokenGroup'
+import { LODToken } from './performance/LODToken'
 import type { Token } from '@dndmanager/game-runtime'
 
 const TILE_SIZE = 1
@@ -49,9 +50,9 @@ function TokenMesh({ token, isSelected, onClick }: TokenMeshProps) {
         </mesh>
       )}
 
-      {/* Token body: 3D model if available, cylinder fallback otherwise */}
+      {/* Token body: LOD-aware rendering — full model at high zoom, simplified at low */}
       <group ref={meshRef} onClick={onClick}>
-        <CharacterModel url={modelUrl ?? ''} fallbackColor={color} />
+        <LODToken modelUrl={modelUrl ?? ''} fallbackColor={color} />
       </group>
 
       {/* HP bar */}
