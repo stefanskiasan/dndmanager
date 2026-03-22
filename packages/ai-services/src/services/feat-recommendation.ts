@@ -8,7 +8,7 @@ import type {
   FeatRecommendationResponse,
 } from '../types'
 
-const MODEL = 'claude-sonnet-4-20250514'
+const MODEL = 'claude-opus-4-20250514'
 const MAX_TOKENS = 2048
 
 /**
@@ -34,12 +34,17 @@ export async function recommendFeats(
     throw new Error('No text response from Claude')
   }
 
+  let jsonText = textBlock.text.trim()
+  if (jsonText.startsWith('```')) {
+    jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '')
+  }
+
   let result: FeatRecommendationResponse
   try {
-    result = JSON.parse(textBlock.text) as FeatRecommendationResponse
+    result = JSON.parse(jsonText) as FeatRecommendationResponse
   } catch {
     throw new Error(
-      `Failed to parse Claude feat response as JSON: ${textBlock.text.slice(0, 200)}`
+      `Failed to parse Claude feat response as JSON: ${jsonText.slice(0, 200)}`
     )
   }
 

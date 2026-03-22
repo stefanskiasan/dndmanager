@@ -8,7 +8,7 @@ import type {
   CharacterSuggestionRequest,
 } from '../types'
 
-const MODEL = 'claude-sonnet-4-20250514'
+const MODEL = 'claude-opus-4-20250514'
 const MAX_TOKENS = 2048
 
 /**
@@ -39,13 +39,18 @@ export async function suggestCharacter(
     throw new Error('No text response from Claude')
   }
 
-  // Parse JSON response
+  // Strip markdown code fences if present, then parse JSON
+  let jsonText = textBlock.text.trim()
+  if (jsonText.startsWith('```')) {
+    jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '')
+  }
+
   let suggestion: CharacterSuggestion
   try {
-    suggestion = JSON.parse(textBlock.text) as CharacterSuggestion
+    suggestion = JSON.parse(jsonText) as CharacterSuggestion
   } catch {
     throw new Error(
-      `Failed to parse Claude response as JSON: ${textBlock.text.slice(0, 200)}`
+      `Failed to parse Claude response as JSON: ${jsonText.slice(0, 200)}`
     )
   }
 

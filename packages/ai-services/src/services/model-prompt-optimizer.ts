@@ -5,7 +5,7 @@ import {
 } from '../prompts/model-generation'
 import type { OptimizedModelPrompt } from '../types'
 
-const MODEL = 'claude-sonnet-4-20250514'
+const MODEL = 'claude-opus-4-20250514'
 const MAX_TOKENS = 512
 
 /**
@@ -34,12 +34,18 @@ export async function optimizeModelPrompt(input: {
     throw new Error('No text response from Claude')
   }
 
+  // Strip markdown code fences if present
+  let jsonText = textBlock.text.trim()
+  if (jsonText.startsWith('```')) {
+    jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '')
+  }
+
   let result: OptimizedModelPrompt
   try {
-    result = JSON.parse(textBlock.text) as OptimizedModelPrompt
+    result = JSON.parse(jsonText) as OptimizedModelPrompt
   } catch {
     throw new Error(
-      `Failed to parse Claude response as JSON: ${textBlock.text.slice(0, 200)}`
+      `Failed to parse Claude response as JSON: ${jsonText.slice(0, 200)}`
     )
   }
 

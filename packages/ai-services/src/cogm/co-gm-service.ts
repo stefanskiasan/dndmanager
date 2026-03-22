@@ -2,7 +2,7 @@ import { getAnthropicClient } from '../client'
 import { COGM_SYSTEM_PROMPT, buildGameContextBlock } from './co-gm-prompts'
 import type { CoGMRequest, CoGMMessage } from '../types'
 
-const MODEL = 'claude-sonnet-4-20250514'
+const MODEL = 'claude-opus-4-20250514'
 const MAX_TOKENS = 1024
 
 /**

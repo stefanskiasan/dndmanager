@@ -2,7 +2,7 @@ import { getAnthropicClient } from '../client'
 import { JOURNAL_SYSTEM_PROMPT, buildJournalPrompt } from './journal-prompts'
 import type { JournalGenerateRequest, SessionJournal } from '../types'
 
-const MODEL = 'claude-sonnet-4-20250514'
+const MODEL = 'claude-opus-4-20250514'
 const MAX_TOKENS = 2048
 
 /**
@@ -39,11 +39,16 @@ export async function generateSessionJournal(
     combatSummary: string | null
   }
 
+  let jsonText = textBlock.text.trim()
+  if (jsonText.startsWith('```')) {
+    jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, '').replace(/\n?```\s*$/, '')
+  }
+
   try {
-    parsed = JSON.parse(textBlock.text)
+    parsed = JSON.parse(jsonText)
   } catch {
     throw new Error(
-      `Failed to parse journal response as JSON: ${textBlock.text.slice(0, 200)}`
+      `Failed to parse journal response as JSON: ${jsonText.slice(0, 200)}`
     )
   }
 
