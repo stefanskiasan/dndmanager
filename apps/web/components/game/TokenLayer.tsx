@@ -1,0 +1,88 @@
+'use client'
+
+import { useRef } from 'react'
+import * as THREE from 'three'
+import { useGameStore } from '@/lib/stores/game-store'
+import type { Token } from '@dndmanager/game-runtime'
+
+const TILE_SIZE = 1
+const TOKEN_HEIGHT = 0.8
+const TOKEN_RADIUS = 0.35
+
+const TOKEN_COLORS: Record<string, string> = {
+  player: '#3b82f6',   // blue
+  monster: '#ef4444',   // red
+  npc: '#a855f7',       // purple
+}
+
+interface TokenMeshProps {
+  token: Token
+  isSelected: boolean
+  onClick: () => void
+}
+
+function TokenMesh({ token, isSelected, onClick }: TokenMeshProps) {
+  const meshRef = useRef<THREE.Mesh>(null)
+  const color = TOKEN_COLORS[token.type] ?? '#9ca3af'
+
+  if (!token.visible) return null
+
+  return (
+    <group
+      position={[
+        token.position.x * TILE_SIZE,
+        TOKEN_HEIGHT / 2,
+        token.position.y * TILE_SIZE,
+      ]}
+    >
+      {/* Selection ring */}
+      {isSelected && (
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -TOKEN_HEIGHT / 2 + 0.01, 0]}>
+          <ringGeometry args={[TOKEN_RADIUS + 0.05, TOKEN_RADIUS + 0.12, 32]} />
+          <meshBasicMaterial color="#fbbf24" side={THREE.DoubleSide} />
+        </mesh>
+      )}
+
+      {/* Token body (cylinder placeholder for 3D model) */}
+      <mesh ref={meshRef} onClick={onClick}>
+        <cylinderGeometry args={[TOKEN_RADIUS, TOKEN_RADIUS, TOKEN_HEIGHT, 16]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+
+      {/* HP bar */}
+      <group position={[0, TOKEN_HEIGHT / 2 + 0.15, 0]}>
+        {/* Background */}
+        <mesh>
+          <planeGeometry args={[0.6, 0.08]} />
+          <meshBasicMaterial color="#1f2937" />
+        </mesh>
+        {/* Fill */}
+        <mesh position={[(token.hp.current / token.hp.max - 1) * 0.3, 0, 0.001]}>
+          <planeGeometry args={[0.6 * (token.hp.current / token.hp.max), 0.06]} />
+          <meshBasicMaterial
+            color={token.hp.current / token.hp.max > 0.5 ? '#22c55e' : token.hp.current / token.hp.max > 0.25 ? '#eab308' : '#ef4444'}
+          />
+        </mesh>
+      </group>
+    </group>
+  )
+}
+
+export function TokenLayer() {
+  const tokens = useGameStore((s) => s.tokens)
+  const selectedTokenId = useGameStore((s) => s.selectedTokenId)
+  const selectToken = useGameStore((s) => s.selectToken)
+
+  return (
+    <group name="token-layer">
+      {tokens.map((token) => (
+        <TokenMesh
+          key={token.id}
+          token={token}
+          isSelected={selectedTokenId === token.id}
+          onClick={() => selectToken(token.id)}
+        />
+      ))}
+    </group>
+  )
+}
