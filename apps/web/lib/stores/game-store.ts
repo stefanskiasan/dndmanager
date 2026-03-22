@@ -19,6 +19,7 @@ interface GameStore {
   // Map
   mapSize: [number, number]
   mapTiles: string
+  currentRoom: string | null
 
   // Actions
   setGameStateId: (id: string | null) => void
@@ -31,6 +32,7 @@ interface GameStore {
   setTurn: (turn: TurnState | null) => void
   setRound: (round: number) => void
   setMap: (size: [number, number], tiles: string) => void
+  setCurrentRoom: (room: string | null) => void
   reset: () => void
 }
 
@@ -47,6 +49,7 @@ const initialState = {
   gameStateId: null as string | null,
   mapSize: [10, 10] as [number, number],
   mapTiles: 'stone',
+  currentRoom: null as string | null,
 }
 
 export const useGameStore = create<GameStore>((set) => ({
@@ -77,6 +80,8 @@ export const useGameStore = create<GameStore>((set) => ({
   setRound: (round) => set({ round }),
 
   setMap: (size, tiles) => set({ mapSize: size, mapTiles: tiles }),
+
+  setCurrentRoom: (room) => set({ currentRoom: room }),
 
   reset: () => set(initialState),
 }))

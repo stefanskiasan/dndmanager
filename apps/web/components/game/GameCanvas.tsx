@@ -8,6 +8,7 @@ import { GridOverlay } from './GridOverlay'
 import { UIOverlay } from './UIOverlay'
 import { PerformanceMonitor, PerfOverlay } from './performance/PerformanceMonitor'
 import { LoadingScreen } from './LoadingScreen'
+import { MapTransition } from './MapTransition'
 import { useGameStore } from '@/lib/stores/game-store'
 import { useLoadingStore } from '@/lib/stores/loading-store'
 
@@ -29,8 +30,10 @@ export function GameCanvas() {
           zoom={40}
           target={[centerX, 0, centerY]}
         />
-        <MapLayer />
-        <TokenLayer />
+        <MapTransition type="fade" duration={0.6}>
+          <MapLayer />
+          <TokenLayer />
+        </MapTransition>
         <GridOverlay />
         <PerformanceMonitor />
       </Canvas>
