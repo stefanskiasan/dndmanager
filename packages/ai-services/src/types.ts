@@ -44,3 +44,68 @@ export interface CharacterSuggestionRequest {
   level?: number
   campaignSetting?: string // optional context about the campaign
 }
+
+// ─── 3D Model Generation ─────────────────────────────
+
+/** Status of a Meshy generation task */
+export type MeshyTaskStatus = 'PENDING' | 'IN_PROGRESS' | 'SUCCEEDED' | 'FAILED' | 'EXPIRED'
+
+/** Meshy API "Text to 3D" task creation request */
+export interface MeshyCreateTaskRequest {
+  mode: 'preview' | 'refine'
+  prompt: string
+  art_style: 'realistic' | 'cartoon' | 'low-poly' | 'sculpture' | 'pbr'
+  negative_prompt?: string
+  topology?: 'triangle' | 'quad'
+  target_polycount?: number
+}
+
+/** Meshy API task response */
+export interface MeshyTaskResponse {
+  id: string
+  model_urls: {
+    glb: string
+    fbx: string
+    obj: string
+    usdz: string
+  }
+  thumbnail_url: string
+  prompt: string
+  art_style: string
+  negative_prompt: string
+  status: MeshyTaskStatus
+  created_at: number
+  started_at: number
+  finished_at: number
+  expires_at: number
+  task_error: { message: string } | null
+  progress: number // 0-100
+}
+
+/** Request to generate a 3D model for a character */
+export interface ModelGenerationRequest {
+  characterId: string
+  characterName: string
+  characterDescription: string
+  ancestry?: string
+  className?: string
+  artStyle?: MeshyCreateTaskRequest['art_style']
+}
+
+/** Optimized prompt output from Claude */
+export interface OptimizedModelPrompt {
+  prompt: string
+  negativePrompt: string
+  artStyle: MeshyCreateTaskRequest['art_style']
+}
+
+/** Status response returned to the frontend */
+export interface ModelGenerationStatus {
+  characterId: string
+  meshyTaskId: string | null
+  status: 'none' | 'optimizing' | 'pending' | 'processing' | 'succeeded' | 'failed'
+  progress: number
+  modelUrl: string | null
+  thumbnailUrl: string | null
+  error: string | null
+}
