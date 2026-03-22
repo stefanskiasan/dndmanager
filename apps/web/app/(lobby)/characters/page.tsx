@@ -17,6 +17,7 @@ export default async function MyCharactersPage() {
     .eq('owner_id', user.id)
     .order('updated_at', { ascending: false })
 
+
   // Get campaign assignments for each character
   const characterIds = characters?.map((c) => c.id) ?? []
   const { data: assignments } = characterIds.length > 0
