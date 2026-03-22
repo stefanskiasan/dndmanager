@@ -1,0 +1,1 @@
+export const SCENE_FRAMEWORK_VERSION = '0.0.1'
