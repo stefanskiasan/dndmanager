@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import * as THREE from 'three'
 import { useGameStore } from '@/lib/stores/game-store'
+import { CharacterModel } from './CharacterModel'
 import type { Token } from '@dndmanager/game-runtime'
 
 const TILE_SIZE = 1
@@ -25,6 +26,10 @@ function TokenMesh({ token, isSelected, onClick }: TokenMeshProps) {
   const meshRef = useRef<THREE.Mesh>(null)
   const color = TOKEN_COLORS[token.type] ?? '#9ca3af'
 
+  // modelUrl may exist on the token data (added in Phase 3.1)
+  // Using local type extension to avoid modifying game-runtime package
+  const modelUrl = (token as Token & { modelUrl?: string }).modelUrl
+
   if (!token.visible) return null
 
   return (
@@ -43,11 +48,10 @@ function TokenMesh({ token, isSelected, onClick }: TokenMeshProps) {
         </mesh>
       )}
 
-      {/* Token body (cylinder placeholder for 3D model) */}
-      <mesh ref={meshRef} onClick={onClick}>
-        <cylinderGeometry args={[TOKEN_RADIUS, TOKEN_RADIUS, TOKEN_HEIGHT, 16]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
+      {/* Token body: 3D model if available, cylinder fallback otherwise */}
+      <group ref={meshRef} onClick={onClick}>
+        <CharacterModel url={modelUrl ?? ''} fallbackColor={color} />
+      </group>
 
       {/* HP bar */}
       <group position={[0, TOKEN_HEIGHT / 2 + 0.15, 0]}>
