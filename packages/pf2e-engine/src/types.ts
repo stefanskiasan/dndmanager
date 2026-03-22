@@ -260,3 +260,79 @@ export interface Inventory {
   items: Item[]
   currency: Currency
 }
+
+// ─── Level-Up ───────────────────────────────
+
+/** XP required to reach the next level (PF2e standard: 1000 XP per level) */
+export const XP_PER_LEVEL = 1000
+
+/** Levels at which characters receive ability boosts */
+export const ABILITY_BOOST_LEVELS = [5, 10, 15, 20] as const
+
+/** Class HP per level (hit die + CON modifier added each level) */
+export interface ClassHPConfig {
+  classHitPoints: number  // 6, 8, 10, or 12 depending on class
+}
+
+/** Describes what a character gains at a specific level */
+export interface LevelUpGains {
+  level: number
+  hpIncrease: number                      // classHP + CON modifier
+  abilityBoosts: number                   // 4 if boost level, else 0
+  skillIncreases: number                  // varies by class and level
+  featSlots: LevelUpFeatSlot[]            // which feat types are gained
+  spellSlotGains?: SpellSlotGain[]        // for casters
+}
+
+export interface LevelUpFeatSlot {
+  type: 'class' | 'skill' | 'general' | 'ancestry'
+  level: number   // max feat level the character can pick
+}
+
+export interface SpellSlotGain {
+  spellLevel: number
+  count: number
+}
+
+// ─── Downtime ───────────────────────────────
+
+export type DowntimeActivity = 'earn-income' | 'treat-wounds' | 'craft' | 'retrain'
+
+export interface EarnIncomeResult {
+  activity: 'earn-income'
+  taskLevel: number
+  degree: DegreeOfSuccess
+  earned: Price
+  daysSpent: number
+}
+
+export interface TreatWoundsResult {
+  activity: 'treat-wounds'
+  dc: number
+  degree: DegreeOfSuccess
+  hpRestored: number
+}
+
+export interface CraftingResult {
+  activity: 'craft'
+  itemName: string
+  itemLevel: number
+  dc: number
+  degree: DegreeOfSuccess
+  daysSpent: number
+  costReduction: Price
+  completed: boolean
+}
+
+export interface RetrainingResult {
+  activity: 'retrain'
+  replacedFeat: string
+  newFeat: string
+  daysRequired: number
+}
+
+export type DowntimeResult =
+  | EarnIncomeResult
+  | TreatWoundsResult
+  | CraftingResult
+  | RetrainingResult
