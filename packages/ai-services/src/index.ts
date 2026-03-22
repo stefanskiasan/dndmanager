@@ -1,4 +1,4 @@
-export const AI_SERVICES_VERSION = '0.0.1'
+export { AI_SERVICES_VERSION } from './version'
 
 // Schemas
 export * from './schemas'
@@ -15,3 +15,19 @@ export * from './loader'
 // Pipeline
 export { runPipeline } from './pipeline'
 export type { PipelineOptions, PipelineResult } from './pipeline'
+
+// AI Client
+export { getAnthropicClient, resetClient } from './client'
+
+// Character Suggestion
+export { suggestCharacter } from './services/character-suggestion'
+export {
+  CHARACTER_CREATION_SYSTEM_PROMPT,
+  buildUserPrompt,
+} from './prompts/character-creation'
+export type {
+  CharacterSuggestion,
+  CharacterSuggestionRequest,
+  CharacterOption,
+  AbilityBoostSuggestion,
+} from './types'
