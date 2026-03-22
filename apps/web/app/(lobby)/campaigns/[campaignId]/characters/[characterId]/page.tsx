@@ -41,7 +41,7 @@ export default async function CharacterDetailPage({
         <div className="w-full max-w-md">
           <ModelGenerationPanel
             characterId={character.id}
-            initialStatus={character.model_status ?? 'none'}
+            initialStatus={(character.model_status ?? 'none') as 'none' | 'pending' | 'processing' | 'succeeded' | 'failed'}
             initialModelUrl={character.model_url}
             initialThumbnailUrl={character.model_thumbnail_url}
           />

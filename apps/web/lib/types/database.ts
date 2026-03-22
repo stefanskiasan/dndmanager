@@ -336,6 +336,9 @@ export type Database = {
           level: number
           xp: number
           data: Record<string, unknown>
+          model_url: string | null
+          model_thumbnail_url: string | null
+          model_status: string
           created_at: string
           updated_at: string
         }
@@ -347,6 +350,9 @@ export type Database = {
           level?: number
           xp?: number
           data?: Record<string, unknown>
+          model_url?: string | null
+          model_thumbnail_url?: string | null
+          model_status?: string
           created_at?: string
           updated_at?: string
         }
@@ -358,6 +364,9 @@ export type Database = {
           level?: number
           xp?: number
           data?: Record<string, unknown>
+          model_url?: string | null
+          model_thumbnail_url?: string | null
+          model_status?: string
           created_at?: string
           updated_at?: string
         }
