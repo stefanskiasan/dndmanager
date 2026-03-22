@@ -118,6 +118,45 @@ export type Database = {
           },
         ]
       }
+      campaign_characters: {
+        Row: {
+          id: string
+          campaign_id: string
+          character_id: string
+          active: boolean
+          joined_at: string
+        }
+        Insert: {
+          id?: string
+          campaign_id: string
+          character_id: string
+          active?: boolean
+          joined_at?: string
+        }
+        Update: {
+          id?: string
+          campaign_id?: string
+          character_id?: string
+          active?: boolean
+          joined_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'campaign_characters_campaign_id_fkey'
+            columns: ['campaign_id']
+            isOneToOne: false
+            referencedRelation: 'campaigns'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'campaign_characters_character_id_fkey'
+            columns: ['character_id']
+            isOneToOne: false
+            referencedRelation: 'characters'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       sessions: {
         Row: {
           id: string
@@ -830,7 +869,7 @@ export type Database = {
         Row: {
           id: string
           owner_id: string
-          campaign_id: string
+          campaign_id: string | null
           name: string
           level: number
           xp: number
@@ -844,7 +883,7 @@ export type Database = {
         Insert: {
           id?: string
           owner_id: string
-          campaign_id: string
+          campaign_id?: string | null
           name: string
           level?: number
           xp?: number

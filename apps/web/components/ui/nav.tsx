@@ -11,6 +11,9 @@ export function Nav() {
           <Link href="/campaigns" className="text-sm text-neutral-400 hover:text-neutral-200">
             Kampagnen
           </Link>
+          <Link href="/characters" className="text-sm text-neutral-400 hover:text-neutral-200">
+            Charaktere
+          </Link>
         </div>
       </div>
     </nav>
