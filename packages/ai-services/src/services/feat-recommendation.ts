@@ -8,7 +8,7 @@ import type {
   FeatRecommendationResponse,
 } from '../types'
 
-const MODEL = 'claude-opus-4-20250514'
+const MODEL = 'claude-opus-4-6'
 const MAX_TOKENS = 2048
 
 /**
