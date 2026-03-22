@@ -6,6 +6,7 @@ import { MapLayer } from './MapLayer'
 import { TokenLayer } from './TokenLayer'
 import { GridOverlay } from './GridOverlay'
 import { UIOverlay } from './UIOverlay'
+import { PerformanceMonitor, PerfOverlay } from './performance/PerformanceMonitor'
 import { useGameStore } from '@/lib/stores/game-store'
 
 export function GameCanvas() {
@@ -25,8 +26,10 @@ export function GameCanvas() {
         <MapLayer />
         <TokenLayer />
         <GridOverlay />
+        <PerformanceMonitor />
       </Canvas>
       <UIOverlay />
+      {process.env.NODE_ENV === 'development' && <PerfOverlay />}
     </div>
   )
 }
