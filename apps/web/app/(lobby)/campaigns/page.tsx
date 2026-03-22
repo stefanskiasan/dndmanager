@@ -44,17 +44,19 @@ export default async function CampaignsPage() {
           <h2 className="mb-4 text-xl font-semibold">Deine Kampagnen (GM)</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {gmCampaigns.map((campaign) => (
-              <Card key={campaign.id}>
-                <CardHeader>
-                  <CardTitle>{campaign.name}</CardTitle>
-                  <CardDescription>{campaign.description || 'Keine Beschreibung'}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-neutral-400">
-                    Einladungscode: <code className="rounded bg-neutral-800 px-2 py-1">{campaign.invite_code}</code>
-                  </p>
-                </CardContent>
-              </Card>
+              <Link key={campaign.id} href={`/campaigns/${campaign.id}`}>
+                <Card className="cursor-pointer hover:border-neutral-600 transition-colors">
+                  <CardHeader>
+                    <CardTitle>{campaign.name}</CardTitle>
+                    <CardDescription>{campaign.description || 'Keine Beschreibung'}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-neutral-400">
+                      Einladungscode: <code className="rounded bg-neutral-800 px-2 py-1">{campaign.invite_code}</code>
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </section>
@@ -65,12 +67,14 @@ export default async function CampaignsPage() {
           <h2 className="mb-4 text-xl font-semibold">Beigetretene Kampagnen</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {playerCampaigns.map((campaign: any) => (
-              <Card key={campaign.id}>
-                <CardHeader>
-                  <CardTitle>{campaign.name}</CardTitle>
-                  <CardDescription>{campaign.description || 'Keine Beschreibung'}</CardDescription>
-                </CardHeader>
-              </Card>
+              <Link key={campaign.id} href={`/campaigns/${campaign.id}`}>
+                <Card className="cursor-pointer hover:border-neutral-600 transition-colors">
+                  <CardHeader>
+                    <CardTitle>{campaign.name}</CardTitle>
+                    <CardDescription>{campaign.description || 'Keine Beschreibung'}</CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
             ))}
           </div>
         </section>
